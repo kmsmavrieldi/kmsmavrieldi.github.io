@@ -1,3 +1,28 @@
+<?php
+function get_URL($url){ 
+$curl = curl_init();
+
+curl_setopt_array($curl, array(
+  CURLOPT_URL => $url,
+  CURLOPT_RETURNTRANSFER =>true,
+));
+$result = curl_exec($curl);
+return json_decode($result, true);
+}
+
+$data = get_URL('https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&id=UCZLEB_Oux4yjwV2YIhAlPyQ&key=AIzaSyBTpyWMMNZzkZfasCzV0e2-yAlBmROawz8');
+
+$imgYT = $data['items'][0]['snippet']['thumbnails']['default']['url'];
+$titleYT = $data['items'][0]['snippet']['title'];
+$descriptionYT = $data['items'][0]['snippet']['description'];
+$subscribersYT = $data['items'][0]['statistics']['subscriberCount'];
+
+$data = get_URL('https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UCZLEB_Oux4yjwV2YIhAlPyQ&key=AIzaSyBTpyWMMNZzkZfasCzV0e2-yAlBmROawz8&maxResults=1&order=date');
+
+$thumbVideoYT = $data['items'][0]['snippet']['thumbnails']['medium']['url'];
+$linkVideoYT = $data['items'][0]['id']['videoId'];
+
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -61,6 +86,9 @@
 
 <main>
 
+
+
+
   <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-indicators">
         <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -112,6 +140,9 @@
       <span class="visually-hidden">Next</span>
     </button>
   </div>
+
+
+
 
 
   <!-- Marketing messaging and featurettes
@@ -199,22 +230,27 @@
 </main>
   <!-- FOOTER -->
   <footer class="container">
-
     <!-- Youtube  -->
     <div class="container">
       <h1 class="text-center my-4">My Favourite Youtube Channel</h1>
       <div class="row d-flex justify-content-center">
-        <div id=linkVideoYT class="col-md-4">
-          
+        <div class="col-md-4">
+          <a href="https://www.youtube.com/watch?v=<?= $linkVideoYT ?>" target="_blank">
+            <img src="<?= $thumbVideoYT; ?>" class="rounded img-thumbnail img-fluid" width="100%"  alt="">
+          </a>
         </div>
-        <div id="descYT" class="col-md-8">
-            <!-- <p style='text-align:justify'><?= $descYT; ?></p> -->
+        <div class="col-md-8">
+            <p style='text-align:justify'><?= $descriptionYT; ?></p>
         </div>  
       </div>
       <div class="row d-flex justify-content-start">
-        <div id="idYT" class="row col-md-4">
-
+        <div class="col-md-1">
+          <img src="<?= $imgYT; ?>" class="img-fluid rounded-circle img-thumbnail float-start"> 
         </div>
+        <div class="col-md-3">
+          <h5><?= $titleYT; ?></h5>
+          <p> <?= number_format($subscribersYT); ?> Subscribers </p>
+        </div>           
         <div class="col-md-8">
           <div class="g-ytsubscribe" data-channelid="UCZLEB_Oux4yjwV2YIhAlPyQ" data-layout="default" data-count="default"></div>
         </div>
@@ -227,8 +263,7 @@
 
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="https://apis.google.com/js/platform.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="js/script.js"></script>
+
   
       
   </body>
